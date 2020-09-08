@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Provider } from 'react-redux';
+import store from './store';
+import { loadUser } from './actions/authActions';
+import IndexNavbar from './components/IndexNavbar';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
+import Home from './components/home/Home';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+class App extends React.Component {
+
+    async componentDidMount() {
+        await store.dispatch(loadUser());
+    }
+
+    render() {
+        return (
+            <Provider store={store}>
+                <Router>
+                <IndexNavbar />
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                    </Switch>
+                </Router>
+            </Provider>
+        )
+    }
 }
 
 export default App;

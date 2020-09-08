@@ -1,0 +1,35 @@
+.quantity {
+    width: 75% !important;
+}
+
+.btnOrder {
+    width: 27% !important;
+}
+
+h1 {
+    margin-bottom: 50px !important;
+}
+
+#adress, #quantity {
+    padding-top: 20px;
+}
+
+.divOrderCart {
+    border-radius: 5px;
+    background-color: #f0f0f0;
+}
+
+.myMargin {
+    margin-top: 0.5rem !important;
+    margin-right: 2.5rem !important;
+    margin-bottom: 0.5rem !important;
+    margin-left: 0.5rem !important;
+}
+
+.paddright {
+    width: 11% !important;
+}
+
+.imgOrder {
+    padding-left: 13px;
+}
