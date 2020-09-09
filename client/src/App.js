@@ -8,8 +8,9 @@ import {
     Switch,
     Route,
     Link
-  } from "react-router-dom";
+} from "react-router-dom";
 import Home from './components/home/Home';
+import Show from './components/shows/Show'
 
 
 
@@ -23,9 +24,10 @@ class App extends React.Component {
         return (
             <Provider store={store}>
                 <Router>
-                <IndexNavbar />
+                    <IndexNavbar />
                     <Switch>
                         <Route exact path="/" component={Home} />
+                        <Route exact path="/show/:showid" component={Show} />
                     </Switch>
                 </Router>
             </Provider>
