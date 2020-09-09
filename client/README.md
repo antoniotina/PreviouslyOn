@@ -1,3 +1,19 @@
+PreviouslyOn Project Emulating BetaSeries with BetaSeries API
+
+By Antonio Tina and Victor Reyes
+
+Antonio Tina:
+
+- https://www.linkedin.com/in/antonio-tina-727b781a7/
+- https://github.com/antoniotina
+
+Victor Reyes:
+
+- https://www.linkedin.com/in/reyes-victor/
+- https://github.com/reyesvictor
+
+======================================
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
