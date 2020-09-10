@@ -6,16 +6,32 @@ import ClickNHold from "react-click-n-hold";
 import "./home.css";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Button, Container, Row, Col } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = ({ auth }) => {
   const [shows, setShows] = useState(null);
-  const [limit, setLimit] = useState(5);
   const [offset, setOffset] = useState(0);
-  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(16);
+  const [page, setPage] = useState(0);
   const [redirect, setRedirect] = useState(false);
   const [id_redirect, setIdRedirect] = useState(null);
 
+  // useEffect(async () => {
+  //   await setOffset(1 * limit); //
+  //   await setPage(1); //
+  //   console.log(
+  //     "page = " + page,
+  //     "limit = " + limit,
+  //     "offset = " + offset,
+  //     "SetOffset = " + page * limit,
+  //     "setPage = " + (page + offset)
+  //   );
+  // }, []);
+
   useEffect(() => {
+    console.log("useEffect Page = " + page + " and Offset = " + offset);
     axios
       .get(
         process.env.REACT_APP_API_LINK +
@@ -28,13 +44,16 @@ const Home = ({ auth }) => {
       )
       .then((res) => {
         console.log(res);
-        res.data.shows === [] ? move(-offset) : setShows(res.data.shows);
+        res.data.shows === [] ? move(-offset) : setShows(res.data.shows); //
       });
   }, [page]);
 
-  const move = (amount) => {
-    setPage(page + amount);
-    setOffset(page * 5);
+  const move = async (amount) => {
+    // await setPage(page + amount); //
+    let p = amount + page;
+    console.log("page = " + p, "limit = " + limit, "amount = " + amount);
+    await setOffset(p * limit); //
+    await setPage(p); //
   };
 
   const start = () => {
@@ -79,7 +98,14 @@ const Home = ({ auth }) => {
     axios
       .post(process.env.REACT_APP_API_LINK + "/shows/favorite", body, config)
       .then((res) => {
-        console.log(res);
+        console.log(res, "THE FAVORITE IS DONE");
+        if (res.data.errors == []) {
+          toast.error("An error has occured", { position: "top-center" });
+        } else {
+          toast.success("Tv Show Added To favourites", {
+            position: "top-center",
+          });
+        }
       });
   };
 
@@ -91,53 +117,80 @@ const Home = ({ auth }) => {
         onClickNHold={() => clickNHold(id)} //Timeout callback
         onEnd={() => (auth.isAuthenticated ? end(id) : clickNHold(id))}
       >
-        <button className="btn btn-success">+</button>
+        <Button variant="success" className="ml-5 simpleButtons">
+          +
+        </Button>
       </ClickNHold>
     );
   };
+
+  const ArchiveButton = () => {
+    if (auth.isAuthenticated)
+      return (
+        <Button className="simpleButtons" variant="secondary">
+          Archive
+        </Button>
+      );
+  };
+
+  const center = "justify-content-md-center";
 
   if (redirect) return <Redirect to={"/show/" + id_redirect} />;
 
   return (
     <>
-      <div className="row">
-        <div className="card">
+      <ToastContainer />
+      <Container className="mt-2" fluid>
+        <Row className={center}>
           {shows
             ? shows.map((show) => {
                 return (
-                  <div key={show.id} className="row card p-2 m-1">
-                    <li>
-                      <h3>{show.original_title}</h3>
-                      <h2>
-                        <Image src={show.images.poster} />
-                      </h2>
-                      <p>Seasons: {show.seasons}</p>
-                      <p>Episodes: {show.episodes}</p>
-                      <p>Episode length: {show.length} minutes</p>
-                      <p>Score: {show.notes.mean.toFixed(1)}</p>
-                      <p>Synopsis: {show.description}</p>
-                      <p>
-                        Genres:
-                        {Object.keys(show.genres).map((genre, key) => {
-                          return <span key={key}> {genre}.</span>;
-                        })}
-                      </p>
-                      {ClickNHoldButton(show.id)}
-                    </li>
-                  </div>
+                  <span key={show.id} id="tvShowsRow">
+                    <Col xs>
+                      <h5>
+                        {show.original_title.length > 20
+                          ? show.original_title.substring(0, 20) + "..."
+                          : show.original_title}
+                      </h5>
+                    </Col>
+                    <Col
+                      style={{
+                        marginLeft: 0,
+                        marginRight: 0,
+                      }}
+                    >
+                      <Image
+                        src={show.images.poster}
+                        id="tvShowImg"
+                        // style={{ height: "20vw", width: "auto" }}
+                        thumbnail
+                      />
+                    </Col>
+                    <Row className={center + " mt-2"}>
+                      <Col>{ClickNHoldButton(show.id)}</Col>
+                      <Col>{ArchiveButton(show.id)}</Col>
+                    </Row>
+                  </span>
                 );
               })
             : null}
-        </div>
-      </div>
-      {page !== 1 ? (
-        <button className="btn btn-primary m-2" onClick={() => move(-1)}>
-          Back
-        </button>
-      ) : null}
-      <button className="btn btn-primary m-2" onClick={() => move(1)}>
-        Forward
-      </button>
+        </Row>
+      </Container>
+      <Container fluid>
+        <Row className={center + " mt-5"}>
+          <Button
+            variant="primary"
+            className="mr-2"
+            onClick={() => move(-1)}
+            disabled={page !== 0 ? false : true}
+          >
+            Back
+          </Button>
+          <Button className="ml-2" variant="primary" onClick={() => move(1)}>
+            Forward
+          </Button>
+        </Row>
+      </Container>
     </>
   );
 };

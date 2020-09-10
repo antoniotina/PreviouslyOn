@@ -19,3 +19,22 @@
   -webkit-animation: fill 2s forwards;
   animation: fill 2s forwards;
 }
+
+#tvShowsRow {
+  margin-bottom: 2vh;
+}
+
+#simpleButtons {
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (min-width: 780px) {
+  #tvShowImg {
+    height: calc(10vw + 10vh);
+    width: auto;
+  }
+}
+
+@media screen and (max-width: 781px) {
+}
