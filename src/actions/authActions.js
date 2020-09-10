@@ -20,27 +20,33 @@ export const loadUser = () => (dispatch, getState) => {
     dispatch({ type: USER_LOADING })
     const token = localStorage.getItem('token')
 
-    axios.get(process.env.REACT_APP_API_LINK + '/members/is_active?token=' + token + '&key=' + process.env.REACT_APP_API_KEY)
-        .then(res => {
-            dispatch({
-                type: USER_LOADED_TOKEN,
-                // res.data is an object with user object and the token
-                payload: token
-            })
-            axios.get(process.env.REACT_APP_API_LINK + '/members/infos?token=' + token + '&key=' + process.env.REACT_APP_API_KEY)
-                .then(res => dispatch({
-                    type: USER_LOADED,
+    if (token !== null) {
+        console.log('test')
+        axios.get(process.env.REACT_APP_API_LINK + '/members/is_active?token=' + token + '&key=' + process.env.REACT_APP_API_KEY)
+            .then(res => {
+                dispatch({
+                    type: USER_LOADED_TOKEN,
                     // res.data is an object with user object and the token
-                    payload: res.data
-                }))
-        })
-        .catch(err => {
-            dispatch({
-                type: AUTH_ERROR
+                    payload: token
+                })
+                axios.get(process.env.REACT_APP_API_LINK + '/members/infos?token=' + token + '&key=' + process.env.REACT_APP_API_KEY)
+                    .then(res => dispatch({
+                        type: USER_LOADED,
+                        // res.data is an object with user object and the token
+                        payload: res.data
+                    }))
             })
+            .catch(err => {
+                dispatch({
+                    type: AUTH_ERROR
+                })
+            })
+    }
+    else {
+        dispatch({
+            type: AUTH_ERROR
         })
-
-
+    }
 }
 
 // Register User
