@@ -1,32 +1,31 @@
-import React, { Component, Fragment, useState } from "react";
-import axios from "axios";
-import RegisterModal from "../auth/RegisterModal";
-import LoginModal from "../auth/LoginModal";
-import Logout from "../auth/Logout";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { searchPost } from "../../actions/postActions";
-import { BrowserRouter as Router } from "react-router-dom";
-import "./IndexNavbar.css";
-
+import React, { Component, Fragment } from "react"
+import RegisterModal from "../auth/RegisterModal"
+import LoginModal from "../auth/LoginModal"
+import Logout from "../auth/Logout"
+import { connect } from "react-redux"
+import PropTypes from "prop-types"
+import { searchPost } from "../../actions/postActions"
+import { BrowserRouter as Router } from "react-router-dom"
+import "./IndexNavbar.css"
 import {
   Navbar,
   Nav,
   NavItem,
-} from "react-bootstrap";
+} from "react-bootstrap"
+
 class IndexNavbar extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
       isOpen: false,
       productsCart: [],
       prixTotal: 0,
       nombreTotal: 0,
-    };
+    }
   }
   static propTypes = {
     auth: PropTypes.object.isRequired,
-  };
+  }
 
   componentDidMount() {
 
@@ -35,13 +34,11 @@ class IndexNavbar extends Component {
   operation() {
     this.setState({
       isOpen: !this.state.isOpen,
-    });
+    })
   }
 
   render() {
-    const { user, isAuthenticated, isLoading } = this.props.auth;
-    let id = window.location.href.split("/");
-    id = id[id.length - 1];
+    const { isAuthenticated, isLoading } = this.props.auth
 
     const authLinks = (
       <Fragment>
@@ -51,7 +48,7 @@ class IndexNavbar extends Component {
           </NavItem>
         </Router>
       </Fragment>
-    );
+    )
 
     const guestLinks = (
       <Fragment>
@@ -62,7 +59,7 @@ class IndexNavbar extends Component {
           <RegisterModal />
         </NavItem>
       </Fragment>
-    );
+    )
 
     return (
       <div id="navbarholder">
@@ -78,13 +75,13 @@ class IndexNavbar extends Component {
           </Nav>
         </Navbar>
       </div>
-    );
+    )
   }
 }
 
 const mapStateToProps = (state) => ({
   post: state.post,
   auth: state.auth,
-});
+})
 
-export default connect(mapStateToProps, { searchPost })(IndexNavbar);
+export default connect(mapStateToProps, { searchPost })(IndexNavbar)

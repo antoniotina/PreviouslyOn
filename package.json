@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@david.kucsai/react-pdf-table": "^0.3.0",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@react-pdf/renderer": "^2.0.0-beta.6",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -37,7 +39,7 @@
     "react-step-progress-bar": "^1.0.3",
     "react-string-replace": "^0.4.4",
     "react-tabs": "^3.1.1",
-    "react-toastify": "^6.0.5",
+    "react-toastify": "^6.0.8",
     "react-transition-group": "^4.4.1",
     "react-vertical-timeline": "^0.2.0",
     "reactstrap": "^8.4.1",

@@ -6,8 +6,7 @@ import IndexNavbar from './components/navbar/IndexNavbar';
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
 import Home from './components/home/Home';
 import Show from './components/shows/Show'
