@@ -145,12 +145,14 @@ const Home = ({ auth }) => {
                         marginRight: 0,
                       }}
                     >
-                      <Image
-                        src={show.images.poster}
-                        id="tvShowImg"
-                        // style={{ height: "20vw", width: "auto" }}
-                        thumbnail
-                      />
+                      <Link to={`/show/${show.id}`}>
+                        <Image
+                          src={show.images.poster}
+                          id="tvShowImg"
+                          // style={{ height: "20vw", width: "auto" }}
+                          thumbnail
+                        />
+                      </Link>
                     </Col>
                     <Row className={center + " mt-2"}>
                       <Col>{ClickNHoldButton(show)}</Col>

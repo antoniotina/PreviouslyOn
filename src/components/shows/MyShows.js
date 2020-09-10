@@ -302,12 +302,15 @@ const MyShows = ({ auth }) => {
                         marginRight: 0,
                       }}
                     >
-                      <Image
-                        src={show.images.poster}
-                        id="tvShowImg"
-                        // style={{ height: "20vw", width: "auto" }}
-                        thumbnail
-                      />
+                      <Link to={`/show/${show.id}`}>
+                        <Image
+                          src={show.images.poster}
+                          id="tvShowImg"
+                          href="/myshows"
+                          // style={{ height: "20vw", width: "auto" }}
+                          thumbnail
+                        />
+                      </Link>
                     </Col>
                     <Row className={center + " mt-2"}>
                       <span style={{ margin: "2px" }}>
