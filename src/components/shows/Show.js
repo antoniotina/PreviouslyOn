@@ -161,7 +161,6 @@ const Show = ({ auth }) => {
                             <SlideToggle
                               render={({ toggle, setCollapsibleElement }) => (
                                 <div >
-
                                   <ClickNHold
                                     time={1} // Time to keep pressing. Default is 2
                                     onClickNHold={() => clickNHold(episode.id)} //Timeout callback
@@ -207,7 +206,12 @@ const Show = ({ auth }) => {
                             />
                             :
                             <div >
-                              <span>Season {episode.season}: Episode {episode.episode} </span>
+                              <ClickNHold
+                                time={1} // Time to keep pressing. Default is 2
+                                onClickNHold={() => clickNHold(episode.id)} //Timeout callback
+                              >
+                                <span>Season {episode.season}: Episode {episode.episode} </span>
+                              </ClickNHold>
                             </div>
                           }
                         </div>

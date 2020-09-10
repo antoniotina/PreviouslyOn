@@ -19,12 +19,12 @@ const Home = ({ auth }) => {
     axios
       .get(
         process.env.REACT_APP_API_LINK +
-          "/shows/discover?key=" +
-          process.env.REACT_APP_API_KEY +
-          "&limit=" +
-          limit +
-          "&offset=" +
-          offset
+        "/shows/discover?key=" +
+        process.env.REACT_APP_API_KEY +
+        "&limit=" +
+        limit +
+        "&offset=" +
+        offset
       )
       .then((res) => {
         console.log(res);
@@ -33,8 +33,8 @@ const Home = ({ auth }) => {
   }, [page]);
 
   const move = (amount) => {
-    setPage(page + amount);
-    setOffset(page * 5);
+    setPage((offset + limit) / limit);
+    setOffset(page * limit);
   };
 
   const start = () => {
@@ -104,29 +104,29 @@ const Home = ({ auth }) => {
         <div className="card">
           {shows
             ? shows.map((show) => {
-                return (
-                  <div key={show.id} className="row card p-2 m-1">
-                    <li>
-                      <h3>{show.original_title}</h3>
-                      <h2>
-                        <Image src={show.images.poster} />
-                      </h2>
-                      <p>Seasons: {show.seasons}</p>
-                      <p>Episodes: {show.episodes}</p>
-                      <p>Episode length: {show.length} minutes</p>
-                      <p>Score: {show.notes.mean.toFixed(1)}</p>
-                      <p>Synopsis: {show.description}</p>
-                      <p>
-                        Genres:
+              return (
+                <div key={show.id} className="row card p-2 m-1">
+                  <li>
+                    <h3>{show.original_title}</h3>
+                    <h2>
+                      <Image src={show.images.poster} />
+                    </h2>
+                    <p>Seasons: {show.seasons}</p>
+                    <p>Episodes: {show.episodes}</p>
+                    <p>Episode length: {show.length} minutes</p>
+                    <p>Score: {show.notes.mean.toFixed(1)}</p>
+                    <p>Synopsis: {show.description}</p>
+                    <p>
+                      Genres:
                         {Object.keys(show.genres).map((genre, key) => {
-                          return <span key={key}> {genre}.</span>;
-                        })}
-                      </p>
-                      {ClickNHoldButton(show.id)}
-                    </li>
-                  </div>
-                );
-              })
+                      return <span key={key}> {genre}.</span>;
+                    })}
+                    </p>
+                    {ClickNHoldButton(show.id)}
+                  </li>
+                </div>
+              );
+            })
             : null}
         </div>
       </div>
