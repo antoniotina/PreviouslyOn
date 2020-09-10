@@ -5,7 +5,7 @@ import Logout from "../auth/Logout"
 import { connect } from "react-redux"
 import PropTypes from "prop-types"
 import { searchPost } from "../../actions/postActions"
-import { BrowserRouter as Router } from "react-router-dom"
+import { BrowserRouter as Router, Link, Redirect, NavLink } from "react-router-dom"
 import "./IndexNavbar.css"
 import {
   Navbar,
@@ -27,10 +27,6 @@ class IndexNavbar extends Component {
     auth: PropTypes.object.isRequired,
   }
 
-  componentDidMount() {
-
-  }
-
   operation() {
     this.setState({
       isOpen: !this.state.isOpen,
@@ -42,11 +38,12 @@ class IndexNavbar extends Component {
 
     const authLinks = (
       <Fragment>
-        <Router>
-          <NavItem>
-            <Logout />
-          </NavItem>
-        </Router>
+        <NavItem>
+          <NavLink to='/friends'>Manage friends</NavLink>
+        </NavItem>
+        <NavItem>
+          <Logout />
+        </NavItem>
       </Fragment>
     )
 
@@ -64,10 +61,12 @@ class IndexNavbar extends Component {
     return (
       <div id="navbarholder">
         <Navbar color="light" light="true" expand="lg" id="navbar">
-          <Navbar.Brand href="/" id="brandName">
+          {/* <Navbar.Brand href="/" id="brandName">
             Previously On
+          </Navbar.Brand> */}
+          <Navbar.Brand>
+            <Link to="/">Previously On</Link>
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
         </Navbar>
         <Navbar id="underline">
           <Nav>

@@ -12,6 +12,7 @@ import {
 import Home from './components/home/Home';
 import Show from './components/shows/Show'
 import Episode from './components/episodes/Episode'
+import Friends from './components/friends/Friends'
 
 
 
@@ -30,6 +31,7 @@ class App extends React.Component {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/show/:showid" component={Show} />
                         <Route exact path="/episode/:episodeid" component={Episode} />
+                        <Route exact path="/friends" component={Friends} />
                         <Route render={() => <Redirect to={{ pathname: "/" }} />} />
                     </Switch>
                 </Router>
