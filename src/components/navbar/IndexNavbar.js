@@ -1,51 +1,55 @@
-import React, { Component, Fragment } from "react"
-import RegisterModal from "../auth/RegisterModal"
-import LoginModal from "../auth/LoginModal"
-import Logout from "../auth/Logout"
-import { connect } from "react-redux"
-import PropTypes from "prop-types"
-import { searchPost } from "../../actions/postActions"
-import { BrowserRouter as Router, Link, Redirect, NavLink } from "react-router-dom"
-import "./IndexNavbar.css"
+import React, { Component, Fragment } from "react";
+import RegisterModal from "../auth/RegisterModal";
+import LoginModal from "../auth/LoginModal";
+import Logout from "../auth/Logout";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { searchPost } from "../../actions/postActions";
 import {
-  Navbar,
-  Nav,
-  NavItem,
-} from "react-bootstrap"
+  BrowserRouter as Router,
+  Link,
+  Redirect,
+  NavLink,
+} from "react-router-dom";
+import "./IndexNavbar.css";
+import { Navbar, Nav, NavItem } from "react-bootstrap";
 
 class IndexNavbar extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
       isOpen: false,
       productsCart: [],
       prixTotal: 0,
       nombreTotal: 0,
-    }
+    };
   }
   static propTypes = {
     auth: PropTypes.object.isRequired,
-  }
+  };
 
   operation() {
     this.setState({
       isOpen: !this.state.isOpen,
-    })
+    });
   }
 
   render() {
-    const { isAuthenticated, isLoading } = this.props.auth
+    const { isAuthenticated, isLoading } = this.props.auth;
 
     const authLinks = (
       <Fragment>
-        <NavItem>
-          <NavLink to='/friends'>Manage friends</NavLink>
-        </NavItem>
+        <Nav.Link as={NavLink} to="/myshows">
+          My Shows
+        </Nav.Link>
+        <Nav.Link as={NavLink} to="/friends">
+          Manage friends
+        </Nav.Link>
         <NavItem>
           <Logout />
         </NavItem>
       </Fragment>
-    )
+    );
 
     const guestLinks = (
       <Fragment>
@@ -56,7 +60,7 @@ class IndexNavbar extends Component {
           <RegisterModal />
         </NavItem>
       </Fragment>
-    )
+    );
 
     return (
       <div id="navbarholder">
@@ -69,18 +73,18 @@ class IndexNavbar extends Component {
           </Navbar.Brand>
         </Navbar>
         <Navbar id="underline">
-          <Nav>
+          <Nav className="mr-auto">
             {!isLoading ? (isAuthenticated ? authLinks : guestLinks) : null}
           </Nav>
         </Navbar>
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state) => ({
   post: state.post,
   auth: state.auth,
-})
+});
 
-export default connect(mapStateToProps, { searchPost })(IndexNavbar)
+export default connect(mapStateToProps, { searchPost })(IndexNavbar);

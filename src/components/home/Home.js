@@ -17,18 +17,13 @@ const Home = ({ auth }) => {
   const [page, setPage] = useState(0);
   const [redirect, setRedirect] = useState(false);
   const [id_redirect, setIdRedirect] = useState(null);
-
-  // useEffect(async () => {
-  //   await setOffset(1 * limit); //
-  //   await setPage(1); //
-  //   console.log(
-  //     "page = " + page,
-  //     "limit = " + limit,
-  //     "offset = " + offset,
-  //     "SetOffset = " + page * limit,
-  //     "setPage = " + (page + offset)
-  //   );
-  // }, []);
+  const [loading, setLoading] = useState(false);
+  const center = "justify-content-md-center";
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+    },
+  };
 
   useEffect(() => {
     console.log("useEffect Page = " + page + " and Offset = " + offset);
@@ -40,18 +35,19 @@ const Home = ({ auth }) => {
           "&limit=" +
           limit +
           "&offset=" +
-          offset
+          offset +
+          (auth && auth.token ? "&token=" + auth.token : "")
       )
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
         res.data.shows === [] ? move(-offset) : setShows(res.data.shows); //
+        await setLoading(false);
       });
-  }, [page]);
+  }, [page, auth]);
 
   const move = async (amount) => {
-    // await setPage(page + amount); //
+    await setLoading(true);
     let p = amount + page;
-    console.log("page = " + p, "limit = " + limit, "amount = " + amount);
     await setOffset(p * limit); //
     await setPage(p); //
   };
@@ -67,26 +63,18 @@ const Home = ({ auth }) => {
       id,
       auth.isAuthenticated
     );
-    // return <Link to={"/show/" + id} />;
     await setIdRedirect(id);
     await setRedirect(true);
   };
 
   // add show to follow list
-  const end = (id) => {
+  const addShow = async (id) => {
     console.log(
       "this is the end, adding to the users shows list",
       auth.isAuthenticated
     );
 
     console.log(auth);
-
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-      },
-    };
-
     const body = {
       id: id,
       key: process.env.REACT_APP_API_KEY,
@@ -96,26 +84,35 @@ const Home = ({ auth }) => {
     console.log("Body sent", body);
 
     axios
-      .post(process.env.REACT_APP_API_LINK + "/shows/favorite", body, config)
-      .then((res) => {
+      .post(process.env.REACT_APP_API_LINK + "/shows/show", body, config)
+      .then(async (res) => {
         console.log(res, "THE FAVORITE IS DONE");
         if (res.data.errors == []) {
           toast.error("An error has occured", { position: "top-center" });
         } else {
-          toast.success("Tv Show Added To favourites", {
+          toast.success("Tv Show Added", {
             position: "top-center",
           });
         }
+      })
+      .catch((err) => {
+        toast.error("An error has occured", { position: "top-center" });
       });
   };
 
-  const ClickNHoldButton = (id) => {
+  const ClickNHoldButton = ({ id, user }) => {
     return (
       <ClickNHold
         time={2} // Time to keep pressing. Default is 2
         onStart={start} // Start callback
         onClickNHold={() => clickNHold(id)} //Timeout callback
-        onEnd={() => (auth.isAuthenticated ? end(id) : clickNHold(id))}
+        onEnd={() =>
+          auth.isAuthenticated
+            ? user.in_account
+              ? console.log("test in account")
+              : addShow(id)
+            : clickNHold(id)
+        }
       >
         <Button variant="success" className="ml-5 simpleButtons">
           +
@@ -123,17 +120,6 @@ const Home = ({ auth }) => {
       </ClickNHold>
     );
   };
-
-  const ArchiveButton = () => {
-    if (auth.isAuthenticated)
-      return (
-        <Button className="simpleButtons" variant="secondary">
-          Archive
-        </Button>
-      );
-  };
-
-  const center = "justify-content-md-center";
 
   if (redirect) return <Redirect to={"/show/" + id_redirect} />;
 
@@ -167,8 +153,7 @@ const Home = ({ auth }) => {
                       />
                     </Col>
                     <Row className={center + " mt-2"}>
-                      <Col>{ClickNHoldButton(show.id)}</Col>
-                      <Col>{ArchiveButton(show.id)}</Col>
+                      <Col>{ClickNHoldButton(show)}</Col>
                     </Row>
                   </span>
                 );
@@ -182,11 +167,16 @@ const Home = ({ auth }) => {
             variant="primary"
             className="mr-2"
             onClick={() => move(-1)}
-            disabled={page !== 0 ? false : true}
+            disabled={page !== 0 ? loading : true}
           >
             Back
           </Button>
-          <Button className="ml-2" variant="primary" onClick={() => move(1)}>
+          <Button
+            className="ml-2"
+            variant="primary"
+            onClick={() => move(1)}
+            disabled={loading}
+          >
             Forward
           </Button>
         </Row>

@@ -5,6 +5,7 @@
   "dependencies": {
     "@david.kucsai/react-pdf-table": "^0.3.0",
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@react-pdf/renderer": "^2.0.0-beta.6",
     "@testing-library/jest-dom": "^4.2.4",
@@ -22,7 +23,7 @@
     "react-bootstrap-slider": "^2.2.3",
     "react-click-n-hold": "^1.0.7",
     "react-confirm": "^0.1.20",
-    "react-confirm-alert": "^2.6.1",
+    "react-confirm-alert": "^2.6.2",
     "react-date-picker": "^8.0.1",
     "react-dom": "^16.13.1",
     "react-gsap": "^2.2.1",
