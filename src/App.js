@@ -14,6 +14,8 @@ import Show from "./components/shows/Show";
 import MyShows from "./components/shows/MyShows";
 import Episode from "./components/episodes/Episode";
 import Friends from "./components/friends/Friends";
+import "./fonts/helvetica.css";
+import "./App.css";
 
 class App extends React.Component {
   async componentDidMount() {

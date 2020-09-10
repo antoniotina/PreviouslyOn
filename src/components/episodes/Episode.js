@@ -47,6 +47,7 @@ const Episode = ({ auth }) => {
                 "&width=100&height=150"
               }
               className="col-sm-12 col-md-6 col-lg-3 col-xl-3"
+              thumbnail
             />
             <div className="col-sm-12 col-md-6 col-lg-9 col-xl-9">
               <p>{episode.code}</p>

@@ -1,0 +1,25 @@
+#bg-show {
+  top: 0;
+  z-index: -1;
+  position: fixed;
+  opacity: 0.7;
+  /* height: 100vh; */
+  filter: blur(15px);
+  -webkit-filter: blur(15px);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+}
+
+.bloc {
+  border-radius: 0.5vw;
+  background: lightgrey;
+  background-color: rgba(220, 220, 220, 0.5);
+}

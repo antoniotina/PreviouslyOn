@@ -1,15 +1,21 @@
 @import url("https://fonts.googleapis.com/css?family=Material+Icons");
 
+#navbarholder {
+  -webkit-box-shadow: -1px 11px 32px -21px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: -1px 11px 32px -21px rgba(0, 0, 0, 0.1);
+  box-shadow: -1px 11px 32px -21px rgba(0, 0, 0, 0.1);
+}
+
 #navbar a {
-  color: black!important;
+  color: black !important;
   text-transform: lowercase;
   text-decoration: none;
   letter-spacing: 0.15em;
-  font-family: 'Montserrat',Arial, Helvetica, sans-serif;
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
   display: inline-block;
   position: relative;
 }
-#navbar a:after {    
+#navbar a:after {
   background: none repeat scroll 0 0 transparent;
   bottom: 0;
   content: "";
@@ -21,10 +27,10 @@
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }
-#navbar a:hover:after { 
-  width: 100%; 
+#navbar a:hover:after {
+  width: 100%;
   left: 0;
- }
+}
 
 @media (min-width: 992px) {
   #navbarholder {

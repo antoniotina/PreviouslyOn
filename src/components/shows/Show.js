@@ -13,10 +13,14 @@ import {
   ModalBody,
   ModalFooter,
   Input,
+  Container,
+  Row,
+  Col,
 } from "reactstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClickNHold from "react-click-n-hold";
+import "./show.css";
 
 const Show = ({ auth }) => {
   const [show, setShow] = useState(null);
@@ -46,6 +50,7 @@ const Show = ({ auth }) => {
       .then((res) => {
         // console.log(res.data.show)
         setShow(res.data.show);
+        console.log(res.data);
       });
   }, []);
 
@@ -191,187 +196,187 @@ const Show = ({ auth }) => {
 
   return (
     <>
-      <div className="container">
-        <ToastContainer />
-        <div className="card">
-          {show ? (
-            <div className="m-2">
-              <h2 className="text-center">{show.original_title}</h2>
-              <div className="row m-2">
-                <Image
-                  src={show.images.poster}
-                  className="col-sm-12 col-md-6 col-lg-3 col-xl-3"
-                />
-                <div className="col-sm-12 col-md-6 col-lg-9 col-xl-9">
-                  <p>Seasons: {show.seasons}</p>
-                  <p>Episodes: {show.episodes}</p>
-                  <p>Episode length: {show.length} minutes</p>
-                  <p>
-                    <Rating
-                      name="half-rating-read"
-                      defaultValue={show.notes.mean}
-                      precision={0.1}
-                      readOnly
-                    />
-                  </p>
-                  <p>Synopsis: {show.description}</p>
-                  <p>
-                    Genres:
-                    {Object.keys(show.genres).map((genre, key) => {
-                      return <span key={key}> {genre}.</span>;
-                    })}
-                  </p>
-                </div>
-                <h3 className="pt-3">Episodes</h3>
-                <div className="row m-2">
-                  {episodes
-                    ? episodes.map((episode) => {
-                        return (
-                          <div
-                            key={episode.id}
-                            className="col-sm-12 col-md-12 col-lg-6 col-xl-6 my-collapsible p-2"
-                          >
-                            {auth.isAuthenticated ? (
-                              <SlideToggle
-                                render={({ toggle, setCollapsibleElement }) => (
-                                  <div>
-                                    <ClickNHold
-                                      time={1} // Time to keep pressing. Default is 2
-                                      onClickNHold={() =>
-                                        clickNHold(episode.id)
-                                      } //Timeout callback
-                                    >
-                                      <Button
-                                        className="my-collapsible__toggle"
-                                        onClick={toggle}
-                                      >
-                                        <span>
-                                          Season {episode.season}: Episode{" "}
-                                          {episode.episode}{" "}
-                                        </span>
-                                      </Button>
-                                    </ClickNHold>
-                                    <div
-                                      className="my-collapsible__content"
-                                      ref={setCollapsibleElement}
-                                    >
-                                      <div className="my-collapsible__content-inner">
-                                        <span>
-                                          {episode.user.seen ? (
-                                            <div>
-                                              <span>Seen</span>
-                                              <p
-                                                className="btn btn-danger"
-                                                onClick={() =>
-                                                  removeEpisodeFromSeen(
-                                                    episode.id
-                                                  )
-                                                }
-                                              >
-                                                Remove seen
-                                              </p>
-                                            </div>
-                                          ) : (
-                                            <div>
-                                              <span>Not seen</span>
-                                              <br />
-                                              <p
-                                                className="btn btn-success btn-sm m-1"
-                                                onClick={() =>
-                                                  addEpisodeToSeen(
-                                                    episode.id,
-                                                    false
-                                                  )
-                                                }
-                                              >
-                                                add to seen
-                                              </p>
-                                              <p
-                                                className="btn btn-success btn-sm m-1"
-                                                onClick={() =>
-                                                  addEpisodeToSeen(
-                                                    episode.id,
-                                                    true
-                                                  )
-                                                }
-                                              >
-                                                add to seen + all the previous
-                                                episodes
-                                              </p>
-                                            </div>
-                                          )}
-                                        </span>
-                                        <Button
-                                          color="danger"
-                                          onClick={() =>
-                                            toggleModal(episode.id)
-                                          }
-                                        >
-                                          Add a comment
-                                        </Button>
-                                        <Modal
-                                          isOpen={modal}
-                                          toggle={toggleModal}
-                                          className="stuff"
-                                        >
-                                          <ModalHeader toggle={toggleModal}>
-                                            Modal title
-                                          </ModalHeader>
-                                          <ModalBody>
-                                            put the textarea here
-                                            <Input
-                                              type="textarea"
-                                              name="text"
-                                              id="exampleText"
-                                              onChange={(e) =>
-                                                setComment(e.target.value)
-                                              }
-                                            />
-                                          </ModalBody>
-                                          <ModalFooter>
-                                            <Button
-                                              color="primary"
-                                              onClick={addCommentToEpisode}
-                                            >
-                                              Add Comment
-                                            </Button>
-                                            <Button
-                                              color="secondary"
-                                              onClick={toggleModal}
-                                            >
-                                              Cancel
-                                            </Button>
-                                          </ModalFooter>
-                                        </Modal>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-                                collapsed
-                              />
-                            ) : (
+      <ToastContainer />
+      {show ? (
+        <>
+          <Container
+            fluid
+            style={{
+              backgroundImage: `url(${show.images.show})`,
+            }}
+            id="bg-show"
+          ></Container>
+          <Container style={{ zIndex: 2, justifyContent: "center" }} fluid>
+            <Row style={{ padding: "calc(3vw + 3vh)" }}>
+              <div className="col-sm-12 col-md-6 col-lg-9 col-xl-9 bloc p-5">
+                <h2 style={{ zIndex: 2 }}>{show.original_title}</h2>
+                <p>Seasons: {show.seasons}</p>
+                <p>Episodes: {show.episodes}</p>
+                <p>Episode length: {show.length} minutes</p>
+                <p>
+                  <Rating
+                    name="half-rating-read"
+                    defaultValue={show.notes.mean}
+                    precision={0.1}
+                    readOnly
+                  />
+                </p>
+                <p>Synopsis: {show.description}</p>
+                <p>
+                  Genres:
+                  {Object.keys(show.genres).map((genre, key) => {
+                    return <span key={key}> {genre}.</span>;
+                  })}
+                </p>
+              </div>
+              <Image
+                src={show.images.poster}
+                className="col-sm-12 col-md-6 col-lg-3 col-xl-3"
+                thumbnail
+              />
+            </Row>
+            <Row style={{ padding: "calc(3vw + 3vh)", textAlign: "center" }}>
+              <Col sm={12}>
+                <h3>Episodes</h3>
+              </Col>
+              <br />
+              {episodes
+                ? episodes.map((episode) => {
+                    return (
+                      <div
+                        key={episode.id}
+                        className="col-sm-12 col-md-12 col-lg-6 col-xl-6 my-collapsible p-2"
+                      >
+                        {auth.isAuthenticated ? (
+                          <SlideToggle
+                            render={({ toggle, setCollapsibleElement }) => (
                               <div>
                                 <ClickNHold
                                   time={1} // Time to keep pressing. Default is 2
                                   onClickNHold={() => clickNHold(episode.id)} //Timeout callback
                                 >
-                                  <span>
-                                    Season {episode.season}: Episode{" "}
-                                    {episode.episode}{" "}
-                                  </span>
+                                  <Button
+                                    className="my-collapsible__toggle"
+                                    onClick={toggle}
+                                  >
+                                    <span>
+                                      Season {episode.season}: Episode{" "}
+                                      {episode.episode}{" "}
+                                    </span>
+                                  </Button>
                                 </ClickNHold>
+                                <div
+                                  className="my-collapsible__content"
+                                  ref={setCollapsibleElement}
+                                >
+                                  <div className="my-collapsible__content-inner">
+                                    <span>
+                                      {episode.user.seen ? (
+                                        <div>
+                                          <span>Seen</span>
+                                          <p
+                                            className="btn btn-danger"
+                                            onClick={() =>
+                                              removeEpisodeFromSeen(episode.id)
+                                            }
+                                          >
+                                            Remove seen
+                                          </p>
+                                        </div>
+                                      ) : (
+                                        <div>
+                                          <span>Not seen</span>
+                                          <br />
+                                          <p
+                                            className="btn btn-success btn-sm m-1"
+                                            onClick={() =>
+                                              addEpisodeToSeen(
+                                                episode.id,
+                                                false
+                                              )
+                                            }
+                                          >
+                                            add to seen
+                                          </p>
+                                          <p
+                                            className="btn btn-success btn-sm m-1"
+                                            onClick={() =>
+                                              addEpisodeToSeen(episode.id, true)
+                                            }
+                                          >
+                                            add to seen + all the previous
+                                            episodes
+                                          </p>
+                                        </div>
+                                      )}
+                                    </span>
+                                    <Button
+                                      color="danger"
+                                      onClick={() => toggleModal(episode.id)}
+                                    >
+                                      Add a comment
+                                    </Button>
+                                    <Modal
+                                      isOpen={modal}
+                                      toggle={toggleModal}
+                                      className="stuff"
+                                    >
+                                      <ModalHeader toggle={toggleModal}>
+                                        Modal title
+                                      </ModalHeader>
+                                      <ModalBody>
+                                        put the textarea here
+                                        <Input
+                                          type="textarea"
+                                          name="text"
+                                          id="exampleText"
+                                          onChange={(e) =>
+                                            setComment(e.target.value)
+                                          }
+                                        />
+                                      </ModalBody>
+                                      <ModalFooter>
+                                        <Button
+                                          color="primary"
+                                          onClick={addCommentToEpisode}
+                                        >
+                                          Add Comment
+                                        </Button>
+                                        <Button
+                                          color="secondary"
+                                          onClick={toggleModal}
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </ModalFooter>
+                                    </Modal>
+                                  </div>
+                                </div>
                               </div>
                             )}
+                            collapsed
+                          />
+                        ) : (
+                          <div>
+                            <ClickNHold
+                              time={1} // Time to keep pressing. Default is 2
+                              onClickNHold={() => clickNHold(episode.id)} //Timeout callback
+                            >
+                              <span>
+                                Season {episode.season}: Episode{" "}
+                                {episode.episode}{" "}
+                              </span>
+                            </ClickNHold>
                           </div>
-                        );
-                      })
-                    : null}
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </div>
+                        )}
+                      </div>
+                    );
+                  })
+                : null}
+            </Row>
+          </Container>
+        </>
+      ) : null}
     </>
   );
 };

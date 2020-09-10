@@ -126,7 +126,7 @@ const Home = ({ auth }) => {
   return (
     <>
       <ToastContainer />
-      <Container className="mt-2" fluid>
+      <Container className="mt-4" fluid>
         <Row className={center}>
           {shows
             ? shows.map((show) => {
@@ -164,7 +164,7 @@ const Home = ({ auth }) => {
         </Row>
       </Container>
       <Container fluid>
-        <Row className={center + " mt-5"}>
+        <Row className={center + " mt-4"}>
           <Button
             variant="primary"
             className="mr-2"
