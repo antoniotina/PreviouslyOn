@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axios from 'axios'
 import PropTypes from "prop-types"
-import { useRouteMatch } from "react-router-dom"
+import { useRouteMatch, Redirect } from "react-router-dom"
 import { connect } from 'react-redux'
 import Image from 'react-bootstrap/Image'
 import Rating from '@material-ui/lab/Rating'
@@ -9,13 +9,16 @@ import SlideToggle from "react-slide-toggle"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import ClickNHold from "react-click-n-hold"
 
 const Show = ({ auth }) => {
   const [show, setShow] = useState(null)
   const [episodes, setEpisodes] = useState(false)
   const [comment, setComment] = useState(false)
   const [commentId, setCommentId] = useState(false)
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false)
+  const [redirect, setRedirect] = useState(false)
+  const [id_redirect, setIdRedirect] = useState(null)
 
   const toggleModal = (episodeId) => {
     setModal(!modal)
@@ -88,6 +91,25 @@ const Show = ({ auth }) => {
       })
   }
 
+  // redirect to episode
+  const clickNHold = async (id) => {
+    await setIdRedirect(id);
+    await setRedirect(true);
+  };
+
+  const ClickNHoldButton = (id) => {
+    return (
+      <ClickNHold
+        time={1} // Time to keep pressing. Default is 2
+        onClickNHold={() => clickNHold(id)} //Timeout callback
+      >
+        <button className="btn btn-success">+</button>
+      </ClickNHold>
+    )
+  }
+
+  if (redirect) return <Redirect to={"/episode/" + id_redirect} />;
+
   return (
     <>
       <div className="container">
@@ -139,9 +161,15 @@ const Show = ({ auth }) => {
                             <SlideToggle
                               render={({ toggle, setCollapsibleElement }) => (
                                 <div >
-                                  <div className="my-collapsible__toggle" onClick={toggle}>
-                                    <span>Season {episode.season}: Episode {episode.episode} </span>
-                                  </div>
+
+                                  <ClickNHold
+                                    time={1} // Time to keep pressing. Default is 2
+                                    onClickNHold={() => clickNHold(episode.id)} //Timeout callback
+                                  >
+                                    <div className="my-collapsible__toggle" onClick={toggle}>
+                                      <span>Season {episode.season}: Episode {episode.episode} </span>
+                                    </div>
+                                  </ClickNHold>
                                   <div className="my-collapsible__content" ref={setCollapsibleElement}>
                                     <div className="my-collapsible__content-inner">
                                       <span>

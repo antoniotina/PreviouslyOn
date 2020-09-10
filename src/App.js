@@ -6,10 +6,12 @@ import IndexNavbar from './components/navbar/IndexNavbar';
 import {
     BrowserRouter as Router,
     Switch,
-    Route
+    Route,
+    Redirect
 } from "react-router-dom";
 import Home from './components/home/Home';
 import Show from './components/shows/Show'
+import Episode from './components/episodes/Episode'
 
 
 
@@ -27,6 +29,8 @@ class App extends React.Component {
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/show/:showid" component={Show} />
+                        <Route exact path="/episode/:episodeid" component={Episode} />
+                        <Route render={() => <Redirect to={{ pathname: "/" }} />} />
                     </Switch>
                 </Router>
             </Provider>
