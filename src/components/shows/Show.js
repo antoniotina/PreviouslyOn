@@ -235,7 +235,13 @@ const Show = ({ auth }) => {
                 thumbnail
               />
             </Row>
-            <Row style={{ padding: "calc(3vw + 3vh)", textAlign: "center" }}>
+            <Row
+              style={{
+                padding: "calc(3vw + 3vh)",
+                paddingTop: "0",
+                textAlign: "center",
+              }}
+            >
               <Col sm={12}>
                 <h3>Episodes</h3>
               </Col>
