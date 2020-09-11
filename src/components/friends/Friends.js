@@ -135,7 +135,7 @@ const Friends = ({ auth }) => {
         <Row className="pt-3">
           <Col sm="6">
             <Form onSubmit={addFriend}>
-              <FormGroup controlId="exampleForm.ControlInput1">
+              <FormGroup>
                 <Label>Add friend:</Label>
                 <Input
                   type="email"
