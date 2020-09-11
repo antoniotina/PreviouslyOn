@@ -1,74 +1,74 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Redirect, Link } from "react-router-dom";
-import Image from "react-bootstrap/Image";
-import ClickNHold from "react-click-n-hold";
-import "./myshows.css";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { Button, Container, Row, Col } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { ListGroupItemText } from "reactstrap";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import { Redirect, Link } from "react-router-dom"
+import Image from "react-bootstrap/Image"
+import ClickNHold from "react-click-n-hold"
+import "./myshows.css"
+import { connect } from "react-redux"
+import PropTypes from "prop-types"
+import { Button, Container, Row, Col } from "react-bootstrap"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { ListGroupItemText } from "reactstrap"
+import FavoriteIcon from "@material-ui/icons/Favorite"
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder"
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward"
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward"
+import DeleteIcon from "@material-ui/icons/Delete"
+import { confirmAlert } from "react-confirm-alert" // Import
+import "react-confirm-alert/src/react-confirm-alert.css" // Import css
 
 const MyShows = ({ auth }) => {
-  const [shows, setShows] = useState(null);
-  const [offset, setOffset] = useState(0);
-  const [limit, setLimit] = useState(16);
-  const [page, setPage] = useState(0);
-  const [redirect, setRedirect] = useState(false);
-  const [id_redirect, setIdRedirect] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const key = process.env.REACT_APP_API_KEY;
-  const api_link = process.env.REACT_APP_API_LINK;
+  const [shows, setShows] = useState(null)
+  const [offset, setOffset] = useState(0)
+  const [limit, setLimit] = useState(16)
+  const [page, setPage] = useState(0)
+  const [redirect, setRedirect] = useState(false)
+  const [id_redirect, setIdRedirect] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const key = process.env.REACT_APP_API_KEY
+  const api_link = process.env.REACT_APP_API_LINK
   const config = {
     headers: {
       "Content-type": "application/json",
     },
-  };
+  }
 
   useEffect(() => {
-    console.log(auth);
-  }, [auth]);
+    console.log(auth)
+  }, [auth])
 
   useEffect(() => {
-    loadShows();
-  }, [page, auth]);
+    loadShows()
+  }, [page, auth])
 
   const loadShows = async () => {
     if (auth.user) {
-      console.log(auth.user);
+      console.log(auth.user)
       let url =
         api_link +
         "/shows/member?key=" +
         key +
-        `&id=${auth.user.id}&token=${auth.token}`;
-      console.log(url);
+        `&id=${auth.user.id}&token=${auth.token}&limit=${limit}&offset=${offset}`
+      console.log(url)
 
-      console.log("useEffect Page = " + page + " and Offset = " + offset);
+      console.log("useEffect Page = " + page + " and Offset = " + offset)
       axios.get(url).then(async (res) => {
-        console.log(res);
-        res.data.shows === [] ? move(-offset) : setShows(res.data.shows); //
-      });
+        console.log(res)
+        res.data.shows === [] ? move(-offset) : setShows(res.data.shows) //
+      })
     }
-  };
+  }
 
   const move = async (amount) => {
-    let p = amount + page;
-    await setOffset(p * limit); //
-    await setPage(p); //
-  };
+    let p = amount + page
+    await setOffset(p * limit) //
+    await setPage(p) //
+  }
 
   const start = () => {
-    console.log("this is the start");
-  };
+    console.log("this is the start")
+  }
 
   // redirect to show's
   const clickNHold = async (id) => {
@@ -76,88 +76,88 @@ const MyShows = ({ auth }) => {
       "this is the holding, showing details",
       id,
       auth.isAuthenticated
-    );
-    await setIdRedirect(id);
-    await setRedirect(true);
-  };
+    )
+    await setIdRedirect(id)
+    await setRedirect(true)
+  }
 
   // add show to favourites list
   const addFavorites = async (id) => {
     console.log(
       "this is the addFavorite, adding to the users favorite shows list",
       auth.isAuthenticated
-    );
+    )
 
-    console.log(auth);
+    console.log(auth)
     const body = {
       id: id,
       key: key,
       token: auth.token,
-    };
+    }
 
-    console.log("Body sent", body);
+    console.log("Body sent", body)
 
     axios.post(api_link + "/shows/favorite", body, config).then(async (res) => {
-      console.log(res, "THE FAVORITE IS DONE");
+      console.log(res, "THE FAVORITE IS DONE")
       if (res.data.errors == []) {
-        toast.error("An error has occured", { position: "top-center" });
+        toast.error("An error has occured", { position: "top-center" })
       } else {
         toast.success("Tv Show Added To Favourites", {
           position: "top-center",
-        });
-        await loadShows();
+        })
+        await loadShows()
       }
-    });
-  };
+    })
+  }
 
   // delete show from favourites list
   const delFavorites = async (id) => {
-    console.log("this is the delFavorites", auth.isAuthenticated);
+    console.log("this is the delFavorites", auth.isAuthenticated)
 
-    console.log("Body sent", auth);
+    console.log("Body sent", auth)
 
     axios
       .delete(
         api_link + `/shows/favorite?key=${key}&id=${id}&token=${auth.token}`
       )
       .then(async (res) => {
-        console.log(res, "THE FAVORITE IS DONE");
+        console.log(res, "THE FAVORITE IS DONE")
         if (res.data.errors == []) {
-          toast.error("An error has occured", { position: "top-center" });
+          toast.error("An error has occured", { position: "top-center" })
         } else {
           toast.info("Tv Show Removed From Favourites", {
             position: "top-center",
-          });
-          await loadShows();
+          })
+          await loadShows()
         }
-      });
-  };
+      })
+  }
 
   // delete show from my account
   const delShow = async (id) => {
     console.log(
       "this is the delShow, deleting from the users shows list",
       auth.isAuthenticated
-    );
+    )
 
-    console.log("Body sent", auth);
+    console.log("Body sent", auth)
 
     axios
       .delete(api_link + `/shows/show?key=${key}&id=${id}&token=${auth.token}`)
       .then(async (res) => {
         if (res.data.errors == []) {
-          toast.error("An error has occured", { position: "top-center" });
+          toast.error("An error has occured", { position: "top-center" })
         } else {
           toast.info("Tv Show Removed From You Account", {
             position: "top-center",
-          });
-          await loadShows();
+          })
+          await loadShows()
         }
       })
       .catch((err) => {
-        toast.error("An error has occured", { position: "top-center" });
-      });
-  };
+        toast.error("An error has occured", { position: "top-center" })
+      })
+  }
 
   const ClickNHoldButton = ({ id, user }) => {
     return (
@@ -180,8 +180,8 @@ const MyShows = ({ auth }) => {
           )}
         </Button>
       </ClickNHold>
-    );
-  };
+    )
+  }
 
   const ArchiveButton = ({ id, user }) => {
     if (auth.isAuthenticated)
@@ -200,8 +200,8 @@ const MyShows = ({ auth }) => {
             <ArrowDownwardIcon fontSize="small" />
           )}
         </Button>
-      );
-  };
+      )
+  }
 
   const DelShowButton = ({ id, user }) => {
     return (
@@ -229,56 +229,56 @@ const MyShows = ({ auth }) => {
       >
         <DeleteIcon fontSize="small" />
       </Button>
-    );
-  };
+    )
+  }
 
   const archive = async (id) => {
     const body = {
       id: id,
       key: key,
       token: auth.token,
-    };
+    }
 
     axios.post(api_link + "/shows/archive", body, config).then(async (res) => {
-      console.log(res, "THE ARCHIVE IS DONE");
+      console.log(res, "THE ARCHIVE IS DONE")
       if (res.data.errors == []) {
-        toast.error("An error has occured", { position: "top-center" });
+        toast.error("An error has occured", { position: "top-center" })
       } else {
         toast.success("Tv Show Archived", {
           position: "top-center",
-        });
-        await loadShows();
+        })
+        await loadShows()
       }
-    });
-  };
+    })
+  }
 
   const unarchive = async (id) => {
     const body = {
       id: id,
       key: key,
       token: auth.token,
-    };
+    }
 
     axios
       .delete(
         api_link + `/shows/archive?key=${key}&id=${id}&token=${auth.token}`
       )
       .then(async (res) => {
-        console.log(res, "THE ARCHIVE IS DONE");
+        console.log(res, "THE ARCHIVE IS DONE")
         if (res.data.errors == []) {
-          toast.error("An error has occured", { position: "top-center" });
+          toast.error("An error has occured", { position: "top-center" })
         } else {
           toast.info("Tv Show Unarchived", {
             position: "top-center",
-          });
-          await loadShows();
+          })
+          await loadShows()
         }
-      });
-  };
+      })
+  }
 
-  const center = "justify-content-md-center";
+  const center = "justify-content-md-center"
 
-  if (redirect) return <Redirect to={"/show/" + id_redirect} />;
+  if (redirect) return <Redirect to={"/show/" + id_redirect} />
 
   return (
     <>
@@ -324,12 +324,12 @@ const MyShows = ({ auth }) => {
                       </span>
                     </Row>
                   </span>
-                );
+                )
               })
             : null}
         </Row>
       </Container>
-      {/* <Container fluid>
+      <Container fluid>
         <Row className={center + " mt-5"}>
           <Button
             variant="primary"
@@ -348,17 +348,17 @@ const MyShows = ({ auth }) => {
             Forward
           </Button>
         </Row>
-      </Container> */}
+      </Container>
     </>
-  );
-};
+  )
+}
 
 MyShows.propTypes = {
   auth: PropTypes.object.isRequired,
-};
+}
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-});
+})
 
-export default connect(mapStateToProps)(MyShows);
+export default connect(mapStateToProps)(MyShows)
