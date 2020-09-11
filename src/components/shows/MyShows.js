@@ -281,7 +281,7 @@ const MyShows = ({ auth }) => {
       });
   };
 
-  const center = "justify-content-md-center";
+  const center = "justify-content-center";
 
   if (redirect) return <Redirect to={"/show/" + id_redirect} />;
 
@@ -295,7 +295,7 @@ const MyShows = ({ auth }) => {
                 return (
                   <span key={show.id} id="tvShowsRow">
                     <Col xs>
-                      <h5>
+                      <h5 className="text-center">
                         {show.original_title.length > 20
                           ? show.original_title.substring(0, 20) + "..."
                           : show.original_title}
