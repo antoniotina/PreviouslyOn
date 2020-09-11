@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react"
 import axios from 'axios'
 import PropTypes from "prop-types"
-import { useRouteMatch, Redirect } from "react-router-dom"
 import { connect } from 'react-redux'
-import Rating from '@material-ui/lab/Rating'
-import Image from 'react-bootstrap/Image'
 import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Friends = ({ auth }) => {
   const [friends, setFriends] = useState(false)
+  const [email, setEmail] = useState('')
 
   useEffect(() => {
     if (auth.isAuthenticated) {
@@ -26,32 +26,59 @@ const Friends = ({ auth }) => {
     }
   }, [auth])
 
+  const updateFriends = () => {
+    axios.get(process.env.REACT_APP_API_LINK + '/friends/list?key=' + process.env.REACT_APP_API_KEY + '&token=' + auth.token)
+      .then(res => {
+        setFriends(res.data.users)
+      })
+  }
+
   const removeFriend = (friendId) => {
-    // console.log("Add episode to seen")
     axios.delete(process.env.REACT_APP_API_LINK + '/friends/friend?key=' + process.env.REACT_APP_API_KEY + '&id=' + friendId + '&token=' + auth.token)
       .then(res => {
-        axios.get(process.env.REACT_APP_API_LINK + '/friends/list?key=' + process.env.REACT_APP_API_KEY + '&token=' + auth.token)
-          .then(res => {
-            setFriends(res.data.users)
-          })
+        updateFriends()
       })
   }
 
   const blockFriend = (friendId) => {
-    // console.log("Add episode to seen")
     axios.post(process.env.REACT_APP_API_LINK + '/friends/block?key=' + process.env.REACT_APP_API_KEY + '&id=' + friendId + '&token=' + auth.token)
       .then(res => {
-        axios.get(process.env.REACT_APP_API_LINK + '/friends/list?key=' + process.env.REACT_APP_API_KEY + '&token=' + auth.token)
-          .then(res => {
-            setFriends(res.data.users)
-          })
+        updateFriends()
+      })
+  }
+
+  const addFriend = (e) => {
+    e.preventDefault()
+    axios.get(process.env.REACT_APP_API_LINK + '/friends/find?key=' + process.env.REACT_APP_API_KEY + '&emails=' + email + '&token=' + auth.token)
+      .then(res => {
+        if (res.data.users.length) {
+          axios.post(process.env.REACT_APP_API_LINK + '/friends/friend?key=' + process.env.REACT_APP_API_KEY + '&token=' + auth.token + '&id=' + res.data.users[0].id)
+            .then(res => {
+              updateFriends()
+            })
+            .catch(error => {
+              toast('There was an error')
+            })
+        }
+        else {
+          toast('This user does not exist')
+        }
+      })
+      .catch(error => {
+        toast('There was an error')
       })
   }
 
   return (
     <>
       <div className="container card p-2">
-      
+        <form onSubmit={addFriend} className='m-2 p-2'>
+          <label>
+            Add friend:
+            <input type="email" name="email" onChange={(e) => setEmail(e.target.value)} />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
         {friends ?
           friends.map((friend, key) => {
             return (
@@ -67,6 +94,7 @@ const Friends = ({ auth }) => {
           :
           null
         }
+        <ToastContainer />
       </div>
     </>
   )
